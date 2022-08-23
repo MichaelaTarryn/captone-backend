@@ -20,7 +20,9 @@ router.get("/",(req,res) =>{
        console.log(error)
        res.status(400).send (error); 
     }
-   });
+   }); 
+   
+  
 
 //create a post
 router.post('/', middleware, bodyParser.json(), async (req, res) => {
@@ -48,6 +50,8 @@ router.post('/', middleware, bodyParser.json(), async (req, res) => {
 }
   });
 
+
+
   // {
   //   "img":"lllddd",
   //   "caption":"akakaka",
@@ -55,6 +59,41 @@ router.post('/', middleware, bodyParser.json(), async (req, res) => {
   //   "addlocation":"sssss",
   //   "likes":0
   // }
+
+  //get post with comment created with the comment too 
+  router.get("/:id",(req,res)=>{
+  //   try{
+  //     connection.query ("SELECT * FROM post WHERE postid = ?",[req.params.id],(err,results)=>{
+  //         if(err) throw err
+  //         res.send(results);
+  //     })
+  //  }
+  //  catch(error){
+  //     console.log(error)
+  //     res.status(400).send (error); 
+  //  }
+
+    try{
+      const strQry = `SELECT p.postId, p.img, p.caption, p.peopleTag, p.addlocation, p.likes, p.userId, c.description 
+      FROM post p
+      INNER JOIN comments c
+      ON p.postId = c.commentPost 
+      WHERE p.postId = ${req.params.id}`
+      connection.query (strQry,(err,results)=>{
+          if(err) throw err
+          res.json({
+            results : results,
+            msg : "joing two tables"
+          });
+      })
+   }
+   catch(error){
+      console.log(error)
+      res.status(400).send (error); 
+   }
+
+  }
+  )
 
   //update a post
 router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
