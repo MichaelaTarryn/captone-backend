@@ -48,6 +48,14 @@ router.post('/', middleware, bodyParser.json(), async (req, res) => {
 }
   });
 
+  // {
+  //   "img":"lllddd",
+  //   "caption":"akakaka",
+  //   "peopleTag":"ssss",
+  //   "addlocation":"sssss",
+  //   "likes":0
+  // }
+
   //update a post
 router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
     const {
@@ -74,6 +82,8 @@ router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
     })
   
   });
+
+
 
   //delete a post
   router.delete('/:id', middleware, async (req, res) => {

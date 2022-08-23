@@ -7,9 +7,9 @@ const {compare,hash}=require("bcrypt");
 const middleware=require("../middleware/auth")
 const jwt =require("jsonwebtoken");
 
+
+//get all users
 router.get("/",(req,res) =>{
-
-
  try{
     connection.query (" SELECT * FROM users",(err,results)=>{
         if(err) throw err
@@ -21,6 +21,20 @@ router.get("/",(req,res) =>{
     res.status(400).send (error); 
  }
 })
+
+//get all users by their id 
+router.get("/:id",(req,res) =>{
+  try{
+     connection.query (" SELECT * FROM users",(err,results)=>{
+         if(err) throw err
+         res.send(results);
+     })
+  }
+  catch(error){
+     console.log(error)
+     res.status(400).send (error); 
+  }
+ })
 
 //user register
 router.post('/', bodyParser.json(), async (req, res) => {
@@ -155,6 +169,126 @@ connection.query(strQry, async (err,results)=>{
 
     }
   )
+
+  //update a user account
+router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
+  const {
+    fullname,
+    username,
+    email,
+    userRole,
+    password,
+    profilePic,
+    bio,
+    link,
+    followers,
+    userJob
+  } = req.body
+
+  let sql = `UPDATE users SET ? WHERE id = ${req.params.id} `
+
+  const users = {
+    fullname,
+    username,
+    email,
+    userRole,
+    password,
+    profilePic,
+    bio,
+    link,
+    followers,
+    userJob
+  }
+
+  connection.query(sql, users, (err, result) => {
+    if (err) throw Error
+    res.send(result)
+  })
+
+});
+
+// {
+//   "ID": 2,
+//   "email": "mt",
+//   "fullname": "mt",
+//   "password": "$2b$10$ccHhPAA0Knpq.CvR/3bsfeDqVxfdR.EuvAX6Pxzdz1RkMDXKuKkz6",
+//   "username": "mt22",
+//   "profilePic": "lorem",
+//   "bio": "lorem",
+//   "link": "lorem",
+//   "followers": "null",
+//   "userRole": "null",
+//   "userJob":"sale consulant"
+// }
+
+//add followers
+router.post("/:id/followers", middleware, bodyParser.json(), (req, res) => {
+  try {
+    let {
+    ID
+    } = req.body;
+    const qfollower = ` SELECT followers
+    FROM users
+    WHERE ID = ?;
+    `;
+    
+    connection.query(qfollower, [req.params.id], (err, results) => {
+      if (err) throw err;
+      let followers;
+      if (results.length > 0) {
+        if (results[0].followers === null) {
+          followers = [];
+        } else {
+          followers = JSON.parse(results[0].followers);
+        }
+      }
+      const strProd = `
+    SELECT *
+    FROM users
+    WHERE ID = ${ID};
+    `;
+      connection.query(strProd, async (err, results) => {
+        if (err) throw err;
+
+        let user = 
+        {
+        ID: results[0].ID,
+        email: results[0].email,
+        password: results[0].password,
+        username: results[0].username,
+        profilePic: results[0].profilePic,
+        bio: results[0].bio,
+        link:results[0].link,
+        followers: results[0].followers,
+        userJob:results[0].userJob
+        };
+
+
+        followers.push(user);
+        const strQuery = `UPDATE users
+    SET followers = ?
+    WHERE (ID = ${req.user.id})`;
+        connection.query(strQuery, JSON.stringify(followers), (err) => {
+          if (err) throw err;
+          res.json({
+            test: ID,
+            results,
+            msg: "SUCCESUFULLY ADDED A FOLLOWERS TO YOUR USER",
+          });
+        });
+      });
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+//dumb text to test out
+  // {
+  
+  //   "id":18
+  // }
+
+});
+
 
   //  delete a user account
 router.delete('/:id', middleware, async (req, res) => {

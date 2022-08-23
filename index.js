@@ -4,7 +4,9 @@ const app= express();
 const path = require('path')
 const jwt = require("jsonwebtoken");
 const userRoute=require("./routes/userRoutes");
+const commentroutes=require("./routes/commentroutes");
 const postroutes=require("./routes/postroutes");
+
 const { dirname } = require("path");
 const PORT = process.env.port
 app.set(("port", process.env.PORT || 4000));
@@ -22,7 +24,7 @@ app.get("/", (req,res)=>{
 app.use("/users" ,userRoute);
 
 app.use("/post" ,postroutes);
-
+app.use("/post" ,commentroutes);
 app.listen(PORT ,(err) => {
     if(err) throw err
     console.log(`serve running at http://localhost:${PORT}`)
