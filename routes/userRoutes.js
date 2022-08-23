@@ -172,7 +172,8 @@ connection.query(strQry, async (err,results)=>{
 
   //update a user account
 router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
-  const {
+  try{
+     const {
     fullname,
     username,
     email,
@@ -204,7 +205,9 @@ router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
     if (err) throw Error
     res.send(result)
   })
-
+  }catch(error){
+    res.status(400).send(error)
+  }
 });
 
 // {
@@ -292,7 +295,8 @@ router.post("/:id/followers", middleware, bodyParser.json(), (req, res) => {
 
   //  delete a user account
 router.delete('/:id', middleware, async (req, res) => {
-  // Query
+  try{
+    // Query
   const strQry =
     `
   DELETE FROM users 
@@ -302,6 +306,10 @@ router.delete('/:id', middleware, async (req, res) => {
     if (err) throw err;
     res.send(`${data.affectedRows} successully deleted a user`);
   })
+}catch(error){
+  res.status(400).send(400)
+}
+
 });
 
   module.exports = router

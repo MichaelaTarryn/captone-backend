@@ -24,7 +24,7 @@ app.get("/", (req,res)=>{
 app.use("/users" ,userRoute);
 
 app.use("/post" ,postroutes);
-app.use("/post" ,commentroutes);
+app.use("/comments" ,commentroutes);
 app.listen(PORT ,(err) => {
     if(err) throw err
     console.log(`serve running at http://localhost:${PORT}`)

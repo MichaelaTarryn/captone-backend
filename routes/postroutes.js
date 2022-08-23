@@ -58,6 +58,7 @@ router.post('/', middleware, bodyParser.json(), async (req, res) => {
 
   //update a post
 router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
+   try{
     const {
       img,
       caption,
@@ -80,14 +81,17 @@ router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
       if (err) throw Error
       res.send(result)
     })
-  
+   }catch(error){
+    res.status(400).send(error)
+   }
   });
 
 
 
   //delete a post
   router.delete('/:id', middleware, async (req, res) => {
-    // Query
+   try{
+     // Query
     const strQry =
       `
       DELETE FROM post
@@ -101,6 +105,10 @@ router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
         msg:'successully  delete'
       })
     })
+   }catch(error){
+    res.status(400).send(400)
+   }
+   
   });
 
 
