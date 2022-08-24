@@ -73,12 +73,17 @@ router.post('/', middleware, bodyParser.json(), async (req, res) => {
   //     res.status(400).send (error); 
   //  }
 
+  /// joining three tables , post , users, comment
+
     try{
-      const strQry = `SELECT p.postId, p.img, p.caption, p.peopleTag, p.addlocation, p.likes, p.userId, c.description 
+      const strQry = `SELECT p.postId, p.img, p.caption, p.peopleTag, p.addlocation, p.likes, p.userId, c.description,u.username
       FROM post p
       INNER JOIN comments c
       ON p.postId = c.commentPost 
-      WHERE p.postId = ${req.params.id}`
+      INNER JOIN users u 
+      ON p.userId = u.ID
+      WHERE p.postId = ${req.params.id}
+      `
       connection.query (strQry,(err,results)=>{
           if(err) throw err
           res.json({
