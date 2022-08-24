@@ -6,10 +6,10 @@ const jwt = require("jsonwebtoken");
 const userRoute=require("./routes/userRoutes");
 const commentroutes=require("./routes/commentroutes");
 const postroutes=require("./routes/postroutes");
-
+require("dotenv").config()
 const { dirname } = require("path");
 const PORT = process.env.port
-app.set(("port", process.env.PORT || 4000));
+app.set(("port",PORT || 4000));
 app.use(express.json());
 app.use(cors());
 
