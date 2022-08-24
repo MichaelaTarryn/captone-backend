@@ -8,10 +8,10 @@ const commentroutes=require("./routes/commentroutes");
 const postroutes=require("./routes/postroutes");
 require("dotenv").config()
 const { dirname } = require("path");
-const PORT = process.env.port
+const PORT = process.env.PORT
 app.set(("port",PORT || 4000));
 app.use(express.json());
-app.use(cors());
+app.use(cors(), express.static("public"));
 
 app.get("/", (req,res)=>{
     res.sendFile(__dirname + "/public/index.html")
