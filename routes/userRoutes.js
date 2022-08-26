@@ -153,7 +153,7 @@ connection.query(strQry, async (err,results)=>{
           userRole: results[0].userRole,
           profilePic:results[0].profilePic,
           bio:results[0].bio,
-          links:results[0].links,
+          link:results[0].link,
           userJob:results[0].results,
         },
       };
