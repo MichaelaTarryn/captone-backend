@@ -38,8 +38,26 @@ router.get("/",(req,res) =>{
     }catch(error) {
         res.status(400).send(error)
     }
-   
+  });
+   //delete a comment 
+  router.post('/:id',middleware,bodyParser.json() ,async (req,res) =>{
+    try{
+   const strC=`DELETE * FROM  comments WHERE commentId = ?,`
+
+   connection.query(strC,  [req.params.id],
+    (err, results) => {
+      if (err) throw err;
+      res.json({
+        status:200,
+        results:results,
+        msg:"Delete a comment!"
+      })
+      ;
+    })
+    }catch(error) {
+        res.status(400).send(error)
+    }
 })
 
 
-module.exports = router
+module.exports =router;

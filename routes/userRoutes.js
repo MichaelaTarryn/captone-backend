@@ -36,6 +36,24 @@ router.get("/:id",(req,res) =>{
   }
  })
 
+ //get all users by their id  and posts
+router.get("/:id/post",(req,res) =>{
+  try{
+     connection.query (`SELECT postId, img, caption, likes, userId
+     FROM users u
+     INNER JOIN post p
+     ON u.ID = p.userId  
+     WHERE ID = ?`, [req.params.id],(err,results)=>{
+         if(err) throw err
+         res.send(results);
+     })
+  }
+  catch(error){
+     console.log(error)
+     res.status(400).send (error); 
+  }
+ })
+ 
 //user register
 router.post('/', bodyParser.json(), async (req, res) => {
     try{
