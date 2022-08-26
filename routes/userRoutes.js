@@ -58,17 +58,18 @@ router.get("/:id/post",(req,res) =>{
 router.post('/', bodyParser.json(), async (req, res) => {
     try{
          const bd = req.body;
-    if (bd.userRole === "" || bd.userRole === null) {
+    if (
+      (bd.userRole === "" || bd.userRole === null)) {
       bd.userRole = "user";
     }
     
-    const emailQ = "SELECT email from users WHERE ?";
+    const emailQ = "SELECT email from users WHERE email = ?";
     let email = {
       email: bd.email
     }
-    connection.query(emailQ, email, async (err, results) => {
+    connection.query(emailQ, email.email, async (err, results) => {
       if (err) throw err;
-      if (!results.length >1 ) {
+      if (!results.length >1) {
         res.json({
           alert: "Email Exists"
         });
@@ -92,7 +93,7 @@ router.post('/', bodyParser.json(), async (req, res) => {
                 // Query
         const strQry =
           `
-      INSERT INTO users(email,fullname,password,username, userRole)
+      INSERT INTO users(email,fullname,password,username,userRole)
       VALUES(?, ?, ?, ?,?);
       `;
         //
