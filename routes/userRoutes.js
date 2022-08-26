@@ -122,11 +122,11 @@ router.post('/', bodyParser.json(), async (req, res) => {
   })
   //dumbtext
   // {
-  //   "email":"mt",
-  //   "fullname":"mt",
-  //   "username":"mt22",
-  //   "password":"mt"
-    
+  //   "email":"kehlani@gmail.com",
+  //   "fullname":"kehlani",
+  //   "username":"kehlani",
+  //   "password":"kehlani",
+  //   "userRole" : null
   // }
   //login
   router.patch("/",bodyParser.json(),(req,res)=>{
