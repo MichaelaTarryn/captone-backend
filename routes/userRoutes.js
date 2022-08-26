@@ -151,6 +151,10 @@ connection.query(strQry, async (err,results)=>{
           username: results[0].username,
           email: results[0].email,
           userRole: results[0].userRole,
+          profilePic:results[0].profilePic,
+          bio:results[0].bio,
+          links:results[0].links,
+          userJob:results[0].results,
         },
       };
       jwt.sign(
