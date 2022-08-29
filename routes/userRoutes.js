@@ -224,7 +224,7 @@ router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
     }
 
     connection.query(sql, users, (err, result) => {
-      if (error) throw error
+      if (err) throw err;
       res.json(result)
     })
   } catch (error) {
