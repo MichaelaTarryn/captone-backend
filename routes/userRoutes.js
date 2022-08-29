@@ -221,7 +221,9 @@ router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
 
     connection.query(sql, users, (err, result) => {
       if (err) throw err;
-      res.json(result)
+      res.json({
+        msg: "Successfully update details"
+      });
     })
   } catch (error) {
     res.status(400).send(error)
