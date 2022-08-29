@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const userRoute=require("./routes/userRoutes");
 const commentroutes=require("./routes/commentroutes");
 const postroutes=require("./routes/postroutes");
+const Followersroutes=require("./routes/Followersroutes")
 require("dotenv").config()
 const { dirname } = require("path");
 const PORT = process.env.PORT
@@ -25,7 +26,7 @@ app.use("/users" ,userRoute);
 
 app.use("/post" ,postroutes);
 app.use("/comments" ,commentroutes);
-
+app.use("/followers" ,Followersroutes);
 // app.use(cors({
 //     origin: ['http://127.0.0.1:8080', 'http://localhost:8080'],
 //     credentials: true

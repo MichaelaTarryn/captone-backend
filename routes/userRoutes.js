@@ -259,7 +259,10 @@ router.delete('/:id', middleware, async (req, res) => {
   `;
   connection.query(strQry, [req.params.id], (err, data, fields) => {
     if (err) throw err;
-    res.send(`${data.affectedRows} successully deleted a user`);
+    // res.send(`${data.affectedRows} successully deleted a user`);
+    res.json({
+      msg : "deleted user"
+    });
   })
 }catch(error){
   res.status(400).send(400)
