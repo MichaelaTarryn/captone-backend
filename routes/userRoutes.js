@@ -204,7 +204,6 @@ router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
       profilePic,
       bio,
       link,
-      followers,
       userJob
     } = req.body
 
@@ -219,7 +218,6 @@ router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
       profilePic,
       bio,
       link,
-      followers,
       userJob
     }
 
