@@ -72,33 +72,17 @@
           </tr>
           <tr>
             <th scope="row">5</th>
-            <td>Put '/users/:id'</td>
+            <td>Put '/users/:id' (update user account)</td>
           </tr>
           <tr>
             <th scope="row">5</th>
             <td> PATCH '/users/'(login)</td>
           </tr>
-          <tr>
-            <th scope="row">6</th>
-            <td>DELETE '/users/:id'</td>
-          </tr>
-          <tr>
-            <th scope="row">7</th>
-            <td>Get '/users/:id/cart'</td>
-          </tr>
-          <tr>
-            <th scope="row">8</th>
-            <td>POST '/users/:id/cart'</td>
-          </tr>
-          <tr>
-            <th scope="row">9</th>
-            <td>DELETE '/users/:id/cart'</td>
-          </tr>
 
         </tbody>
      
       </table>
-         <H2>POSTS</H2>
+         <H2>POST</H2>
       <table class="table">
         <thead class="thead-light">
           <tr>
@@ -109,35 +93,54 @@
         <tbody>
           <tr>
             <th scope="row">1</th>
-            <td>Get '/products'</td>
+            <td>Get '/post'</td>
           </tr>
           <tr>
             <th scope="row">2</th>
-            <td>Get '/products/:id'</td>
+            <td>Get '/post/:id' GET ALL POST BY ID WITH COMMENTS THEY MADE</td>
           </tr>
           <tr>
             <th scope="row">3</th>
-            <td>POST '/products'</td>
+            <td>POST '/post'</td>
           </tr>
           <tr>
             <th scope="row">4</th>
-            <td>PUT '/products/:id'</td>
-          </tr>
-          <tr>
-            <th scope="row">5</th>
-            <td>GET '/users/:id/cart</td>
-          </tr>
-          <tr>
-            <th scope="row">6</th>
-            <td>POST '/users/:id/cart'</td>
+            <td>PUT '/post/:id' UPDATE A POST</td>
           </tr>
           <tr>
             <th scope="row">7</th>
-            <td>DELETE '/users/:id/cart'</td>
+            <td>DELETE A POST "POST/:ID"</td>
+          </tr>
+        </tbody>
+      </table>
+      <H2>COMMENTS</H2>
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">routes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Get '/Comments'</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Get '/Comments/:id'</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>POST '/comments'</td>
+          </tr>
+          <tr>
+            <th scope="row">4</th>
+            <td>PUT 'comments/:id' UPDATE A POST</td>
           </tr>
           <tr>
             <th scope="row">7</th>
-            <td>DELETE  single product'/users/:id/cart/:productid'</td>
+            <td>DELETE A comments "comments/:ID"</td>
           </tr>
         </tbody>
       </table>
