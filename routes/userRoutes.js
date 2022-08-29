@@ -2,74 +2,74 @@ const app = require("express");
 const express = require('express')
 const router = express.Router();
 const connection = require("../config/db.connection")
-const bodyParser= require('body-parser');
-const {compare,hash}=require("bcrypt");
-const middleware=require("../middleware/auth")
-const jwt =require("jsonwebtoken");
+const bodyParser = require('body-parser');
+const {
+  compare,
+  hash
+} = require("bcrypt");
+const middleware = require("../middleware/auth")
+const jwt = require("jsonwebtoken");
 
 
 //get all users
-router.get("/",(req,res) =>{
- try{
-    connection.query (" SELECT * FROM users",(err,results)=>{
-        if(err) throw err
-        res.send(results);
+router.get("/", (req, res) => {
+  try {
+    connection.query(" SELECT * FROM users", (err, results) => {
+      if (err) throw err
+      res.send(results);
     })
- }
- catch(error){
+  } catch (error) {
     console.log(error)
-    res.status(400).send (error); 
- }
+    res.status(400).send(error);
+  }
 })
 
 //get all users by their id 
-router.get("/:id",(req,res) =>{
-  try{
-     connection.query (" SELECT * FROM users WHERE ID = ?", [req.params.id],(err,results)=>{
-         if(err) throw err
-         res.send(results);
-     })
+router.get("/:id", (req, res) => {
+  try {
+    connection.query(" SELECT * FROM users WHERE ID = ?", [req.params.id], (err, results) => {
+      if (err) throw err
+      res.send(results);
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(400).send(error);
   }
-  catch(error){
-     console.log(error)
-     res.status(400).send (error); 
-  }
- })
+})
 
- //get all users by their id  and posts
-router.get("/:id/post",(req,res) =>{
-  try{
-     connection.query (`SELECT postId, img, caption, likes, userId
+//get all users by their id  and posts
+router.get("/:id/post", (req, res) => {
+  try {
+    connection.query(`SELECT postId, img, caption, likes, userId
      FROM users u
      INNER JOIN post p
      ON u.ID = p.userId  
-     WHERE ID = ?`, [req.params.id],(err,results)=>{
-         if(err) throw err
-         res.send(results);
-     })
+     WHERE ID = ?`, [req.params.id], (err, results) => {
+      if (err) throw err
+      res.send(results);
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(400).send(error);
   }
-  catch(error){
-     console.log(error)
-     res.status(400).send (error); 
-  }
- })
- 
+})
+
 //user register
 router.post('/', bodyParser.json(), async (req, res) => {
-    try{
-         const bd = req.body;
+  try {
+    const bd = req.body;
     if (
       (bd.userRole === "" || bd.userRole === null)) {
       bd.userRole = "user";
     }
-    
+
     const emailQ = "SELECT email from users WHERE email = ?";
     let email = {
       email: bd.email
     }
     connection.query(emailQ, email.email, async (err, results) => {
       if (err) throw err;
-      if (!results.length >1) {
+      if (!results.length > 1) {
         res.json({
           alert: "Email Exists"
         });
@@ -80,155 +80,154 @@ router.post('/', bodyParser.json(), async (req, res) => {
         // bd.joinDate = `${new Date().toISOString().slice(0, 10)}`;
         // bd.id = await hash(bd.id, 10);
         const usernameQ = "SELECT username from users where ?";
-        let username ={
-            username:bd.username
+        let username = {
+          username: bd.username
         }
-        connection.query (usernameQ, username , async (err, results)=>{
-            if (err) throw err;
-            if(results.length > 0){
-                res.json({
-                    alert:"username already exists please enter new one , thank you "
-                });
-            }else {
-                // Query
-        const strQry =
-          `
+        connection.query(usernameQ, username, async (err, results) => {
+          if (err) throw err;
+          if (results.length > 0) {
+            res.json({
+              alert: "username already exists please enter new one , thank you "
+            });
+          } else {
+            // Query
+            const strQry =
+              `
       INSERT INTO users(email,fullname,password,username,userRole)
       VALUES(?, ?, ?, ?,?);
       `;
-        //
-        connection.query(strQry,
-          [bd.email, bd.fullname, bd.password, bd.username, bd.userRole],
-          (err, results) => {
-            if (err) throw err;
-            res.json({
-              msg:"successfully register !"
-            })
-            // res.send(window.location.href="login.html")
-            // res.sendFile(__dirname + "/login.html")
-            ;
-          })
-            }
+            //
+            connection.query(strQry,
+              [bd.email, bd.fullname, bd.password, bd.username, bd.userRole],
+              (err, results) => {
+                if (err) throw err;
+                res.json({
+                  msg: "successfully register !"
+                })
+                // res.send(window.location.href="login.html")
+                // res.sendFile(__dirname + "/login.html")
+                ;
+              })
+          }
         })
-        
+
       }
     })
-      
-    }catch (error){
-      res.status(400).send(error);
-      // console.log(error);
-    }
-    
-  })
-  //dumbtext
-  // {
-  //   "email":"kehlani@gmail.com",
-  //   "fullname":"kehlani",
-  //   "username":"kehlani",
-  //   "password":"kehlani",
-  //   "userRole" : null
-  // }
-  //login
-  router.patch("/",bodyParser.json(),(req,res)=>{
-    try{
-const {email, password} =req.body
-const strQry= `SELECT * FROM users  where email = '${email}'`
 
-connection.query(strQry, async (err,results)=>{
- if (err) throw err
+  } catch (error) {
+    res.status(400).send(error);
+    // console.log(error);
+  }
 
-  if (!results.length) {
-    res.status(401).json({
-      msg: "Email not found, Please Register"
-    });
-  } else {
-    const ismatch = await compare(password, results[0].password);
-    if (ismatch) {
-      const payload = {
-        user: {
-          id: results[0].ID,
-          fullname: results[0].fullname,
-          username: results[0].username,
-          email: results[0].email,
-          userRole: results[0].userRole,
-          profilePic:results[0].profilePic,
-          bio:results[0].bio,
-          link:results[0].link,
-          userJob:results[0].userJob,
-        },
-      };
-      jwt.sign(
-        payload,
-        process.env.jwtSecret, {
-          expiresIn: "365d",
-        },
-        (err, token) => {
-          res.header({
-            'x-auth-token': token
-          })
-          if (err) throw err;
+})
+//dumbtext
+// {
+//   "email":"kehlani@gmail.com",
+//   "fullname":"kehlani",
+//   "username":"kehlani",
+//   "password":"kehlani",
+//   "userRole" : null
+// }
+//login
+router.patch("/", bodyParser.json(), (req, res) => {
+  try {
+    const {
+      email,
+      password
+    } = req.body
+    const strQry = `SELECT * FROM users  where email = '${email}'`
+
+    connection.query(strQry, async (err, results) => {
+      if (err) throw err
+
+      if (!results.length) {
+        res.status(401).json({
+          msg: "Email not found, Please Register"
+        });
+      } else {
+        const ismatch = await compare(password, results[0].password);
+        if (ismatch) {
+          const payload = {
+            user: {
+              id: results[0].ID,
+              fullname: results[0].fullname,
+              username: results[0].username,
+              email: results[0].email,
+              userRole: results[0].userRole,
+              profilePic: results[0].profilePic,
+              bio: results[0].bio,
+              link: results[0].link,
+              userJob: results[0].userJob,
+            },
+          };
+          jwt.sign(
+            payload,
+            process.env.jwtSecret, {
+              expiresIn: "365d",
+            },
+            (err, token) => {
+              res.header({
+                'x-auth-token': token
+              })
+              if (err) throw err;
+              res.json({
+                user: payload.user,
+                token: token,
+                msg: "Login Successful"
+
+              });
+              // res.json(payload.user);
+            }
+          );
+        } else {
           res.json({
-            user: payload.user,
-            token: token,
-            msg: "Login Successful"
-
+            msg: "You entered the wrong password"
           });
-          // res.json(payload.user);
+          // res.send("You entered the wrong password");
         }
-      );
-    } else {
-      res.json({
-        msg: "You entered the wrong password"
-      });
-      // res.send("You entered the wrong password");
-    }
+      }
+    })
+  } catch (error) {
+    res.status(400).send(error);
   }
 });
 
-
-    }catch(error){
-      res.status(400).send(error);
-    }
-
-    }
-  )
-
-  //update a user account
+//update a user account
 router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
-  try{
-     const {
-    fullname,
-    username,
-    email,
-    userRole,
-    password,
-    profilePic,
-    bio,
-    link,
-    followers,
-    userJob
-  } = req.body
+  try {
+    const {
+      fullname,
+      username,
+      email,
+      userRole,
+      password,
+      profilePic,
+      bio,
+      link,
+      followers,
+      userJob
+    } = req.body
 
-  let sql = `UPDATE users SET ? WHERE id = ${req.params.id} `
+    let sql = `UPDATE users SET ? WHERE id = ${req.params.id} `
 
-  const users = {
-    fullname,
-    username,
-    email,
-    userRole,
-    password,
-    profilePic,
-    bio,
-    link,
-    followers,
-    userJob
-  }
+    const users = {
+      fullname,
+      username,
+      email,
+      userRole,
+      password,
+      profilePic,
+      bio,
+      link,
+      followers,
+      userJob
+    }
 
-  connection.query(sql, users, (err, result) => {
-    if (err) throw Error
-    res.send(result)
-  })
-  }catch(error){
+    connection.query(sql, users, (err, result) => {
+      if (err) throw Error
+      res.send(result)
+    })
+  } catch (error) {
     res.status(400).send(error)
   }
 });
@@ -248,26 +247,26 @@ router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
 // }
 
 
-  //  delete a user account
+//  delete a user account
 router.delete('/:id', middleware, async (req, res) => {
-  try{
+  try {
     // Query
-  const strQry =
-    `
+    const strQry =
+      `
   DELETE FROM users 
   WHERE ID = ?;
   `;
-  connection.query(strQry, [req.params.id], (err, data, fields) => {
-    if (err) throw err;
-    // res.send(`${data.affectedRows} successully deleted a user`);
-    res.json({
-      msg : "deleted user"
-    });
-  })
-}catch(error){
-  res.status(400).send(400)
-}
+    connection.query(strQry, [req.params.id], (err, data, fields) => {
+      if (err) throw err;
+      // res.send(`${data.affectedRows} successully deleted a user`);
+      res.json({
+        msg: "deleted user"
+      });
+    })
+  } catch (error) {
+    res.status(400).send(400)
+  }
 
 });
 
-  module.exports = router
+module.exports = router
