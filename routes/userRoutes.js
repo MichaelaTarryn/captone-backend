@@ -154,7 +154,7 @@ connection.query(strQry, async (err,results)=>{
           profilePic:results[0].profilePic,
           bio:results[0].bio,
           link:results[0].link,
-          userJob:results[0].results,
+          userJob:results[0].userJob,
         },
       };
       jwt.sign(
