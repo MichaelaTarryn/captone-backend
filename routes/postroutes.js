@@ -144,7 +144,10 @@ router.patch('/:id',  bodyParser.json(), async (req, res) => {
       // }
       connection.query(sql, (err, result) => {
         if (err) throw Error
-        res.send(result)
+        res.json({
+          results: results,
+          msg: "Successfully added a post"
+        });
       })
     })
   } catch (error) {
