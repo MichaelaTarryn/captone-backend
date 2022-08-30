@@ -55,7 +55,7 @@ router.post('/', middleware, bodyParser.json(), async (req, res) => {
       res.json({
         status: 200,
         results: req.user,
-        msg: 'successully'
+        msg: 'successully added a post'
       })
     })
   } catch (error) {
@@ -76,17 +76,6 @@ router.post('/', middleware, bodyParser.json(), async (req, res) => {
 
 //get post with comment created with the comment too 
 router.get("/:id", (req, res) => {
-  //   try{
-  //     connection.query ("SELECT * FROM post WHERE postid = ?",[req.params.id],(err,results)=>{
-  //         if(err) throw err
-  //         res.send(results);
-  //     })
-  //  }
-  //  catch(error){
-  //     console.log(error)
-  //     res.status(400).send (error); 
-  //  }
-
   /// joining three tables , post , users, comment
 
   try {
@@ -102,7 +91,7 @@ router.get("/:id", (req, res) => {
       if (err) throw err
       res.json({
         results: results,
-        msg: "joing two tables"
+        msg: "joing three tables"
       });
     })
   } catch (error) {
@@ -111,6 +100,7 @@ router.get("/:id", (req, res) => {
   }
 
 })
+
 
 //update a like on post
 router.patch('/:id',  bodyParser.json(), async (req, res) => {
@@ -146,7 +136,7 @@ router.patch('/:id',  bodyParser.json(), async (req, res) => {
         if (err) throw Error
         res.json({
           results: results,
-          msg: "Successfully added a post"
+          msg: "Successfully added a like"
         });
       })
     })
