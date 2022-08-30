@@ -170,7 +170,10 @@ router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
     }
     connection.query(sql, post, (err, result) => {
       if (err) throw Error
-      res.send(result)
+      res.json({
+        results: results,
+        msg: "Successfully edit a post"
+      });
     })
   } catch (error) {
     res.status(400).send(error)
