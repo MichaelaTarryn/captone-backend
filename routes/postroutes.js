@@ -168,7 +168,7 @@ router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
       likes,
       userId
     }
-    connection.query(sql, post, (err, result) => {
+    connection.query(sql, post, (err, results) => {
       if (err) throw Error
       res.json({
         results: results,
