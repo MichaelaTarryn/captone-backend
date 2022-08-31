@@ -118,20 +118,9 @@ router.patch('/:id',  bodyParser.json(), async (req, res) => {
     connection.query(likesP, (err, results) => {
       if (err) throw err
       let add = results[0].likes + 1
-    
-      // res.send(add);
-
       console.log(add);
       let sql = `UPDATE post SET likes = ${add} WHERE postId = ${req.params.id} `
-      // let userId = req.user.id
-      // const post = {
-      //   img,
-      //   caption,
-      //   peopleTag,
-      //   addlocation,
-      //   likes,
-      //   userId
-      // }
+    
       connection.query(sql, (err, result) => {
         if (err) throw Error
         res.json({

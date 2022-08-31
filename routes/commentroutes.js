@@ -20,6 +20,22 @@ router.get("/",(req,res) =>{
        res.status(400).send (error); 
     }
    });
+
+
+   //get all comments by id
+  
+router.get("/:id",(req,res) =>{
+  try{
+     connection.query ("SELECT * FROM comments WHERE commentId = ?", [req.params.id],(err,results)=>{
+         if(err) throw err
+         res.send(results);
+     })
+  }
+  catch(error){
+     console.log(error)
+     res.status(400).send (error); 
+  }
+ });
   //add a comment 
   router.post('/:id',middleware,bodyParser.json() ,async (req,res) =>{
     try{
@@ -39,10 +55,37 @@ router.get("/",(req,res) =>{
         res.status(400).send(error)
     }
   });
+
+  //edit a comment
+router.patch('/:id',  bodyParser.json(), async (req, res) => {
+  try {
+    const {
+      description
+    } = req.body
+    
+    let sql = `UPDATE comments SET ? WHERE commentId = ${req.params.id} `
+
+    const usersdescription = {
+      description
+    }
+
+    connection.query(sql, usersdescription, (err, result) => {
+      if (err) throw err;
+      res.json({
+        status:200,
+        msg: "Successfully edit comment"
+      });
+    })
+  } catch (error) {
+    res.status(400).send(error)
+  }
+});
+
+
    //delete a comment 
-  router.post('/:id',middleware,bodyParser.json() ,async (req,res) =>{
+  router.delete('/:id',middleware,bodyParser.json() ,async (req,res) =>{
     try{
-   const strC=`DELETE * FROM  comments WHERE commentId = ?,`
+   const strC=`DELETE  FROM  comments WHERE commentId = ?`
 
    connection.query(strC,  [req.params.id],
     (err, results) => {
