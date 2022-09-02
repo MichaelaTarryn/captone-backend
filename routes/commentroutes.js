@@ -47,6 +47,7 @@ router.get("/:id",(req,res) =>{
     (err, results) => {
       if (err) throw err;
       res.json({
+        status:200,
         msg:"succeessfully add a comment !"
       })
       ;

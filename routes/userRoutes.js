@@ -72,7 +72,7 @@ router.get("/:id/post/:postId", (req, res) => {
 //get all users by their id  and posts with comments
 router.get("/:id/post/:postId/comments", (req, res) => {
   try {
-    connection.query(`SELECT p.postId, p.img, p.caption, p.peopleTag, p.addlocation, p.likes, p.userId, c.description,u.username
+    connection.query(`SELECT p.postId, p.img, p.caption, p.peopleTag, p.addlocation, p.likes, p.userId, c.description, c.commentId,u.username
      FROM post p 
      INNER JOIN users u
      ON p.userId = u.ID  
