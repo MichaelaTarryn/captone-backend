@@ -72,21 +72,38 @@ router.get("/:id/post/:postId", (req, res) => {
 //get all users by their id  and posts with comments
 router.get("/:id/post/:postId/comments", (req, res) => {
   try {
-    connection.query(`SELECT p.postId, p.img, p.caption, p.peopleTag, p.addlocation, p.likes, p.userId, c.description, c.commentId,u.username
-     FROM post p 
-     INNER JOIN users u
-     ON p.userId = u.ID  
-     INNER JOIN comments c
+    const join1 = `SELECT *
+    FROM post p
+    JOIN users u
+    ON p.userId = u.ID WHERE p.postId = ${req.params.postId}  `
+
+    connection.query(join1, (err, posted_user) => {
+      if (err) throw err      
+      // Join 2 requires three table join
+      const strQry = `
+    SELECT p.postId, p.img, p.caption, p.peopleTag, p.addlocation, p.likes, p.userId, c.description, c.commentuserId,c.commentId, u.username
+      FROM post p
+      INNER JOIN comments c
       ON p.postId = c.commentPost 
-     WHERE postId = ?`, [req.params.postId], (err, results) => {
+      INNER JOIN users u
+      ON c.commentuserId = u.ID 
+      WHERE p.postId = ${posted_user[0].postId}
+       `
+
+    connection.query(strQry, (err, results) => {
       if (err) throw err
-      res.send(results);
+      res.json({
+        posted_user: posted_user[0],
+        comment: results
+      });
     })
-  } catch (error) {
-    console.log(error)
-    res.status(400).send(error);
-  }
 })
+  } catch (error) {
+    res.status(400).send(error);
+
+  }
+
+});
 
 //user register
 router.post('/', bodyParser.json(), async (req, res) => {

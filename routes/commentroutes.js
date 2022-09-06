@@ -71,7 +71,7 @@ router.patch('/:id',  bodyParser.json(), async (req, res) => {
       description
     }
 
-    connection.query(sql, usersdescription, (err, result) => {
+    connection.query(sql, usersdescription, async (err, result) => {
       if (err) throw err;
       res.json({
         status:200,
