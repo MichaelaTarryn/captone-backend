@@ -138,6 +138,8 @@ router.patch('/:id',  bodyParser.json(), async (req, res) => {
 
 //update a post
 router.put('/:id', middleware, bodyParser.json(), async (req, res) => {
+
+
   try {
     const {
       img,
