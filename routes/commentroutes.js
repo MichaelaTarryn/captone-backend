@@ -38,6 +38,7 @@ router.get("/:id",(req,res) =>{
  });
   //add a comment 
   router.post('/:id',middleware,bodyParser.json() ,async (req,res) =>{
+    console.log(req.user)
     try{
          const bd=req.body
 

@@ -79,12 +79,12 @@ router.get("/:id", (req, res) => {
   /// joining three tables , post , users, comment
 
   try {
-    const strQry = `SELECT p.postId, p.img, p.caption, p.peopleTag, p.addlocation, p.likes, p.userId, c.description,u.username
+    const strQry = `SELECT p.postId, p.img, p.caption, p.peopleTag, p.addlocation, p.likes, p.userId, c.description, c.commentuserId, u.username
       FROM post p
       INNER JOIN comments c
       ON p.postId = c.commentPost 
-      INNER JOIN users u 
-      ON p.userId = u.ID
+      INNER JOIN users u
+      ON c.commentuserId = u.ID
       WHERE p.postId = ${req.params.id}
       `
     connection.query(strQry, (err, results) => {
@@ -98,7 +98,7 @@ router.get("/:id", (req, res) => {
     console.log(error)
     res.status(400).send(error);
   }
-
+  
 })
 
 
