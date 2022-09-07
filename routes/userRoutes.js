@@ -79,7 +79,7 @@ router.get("/:id/post/:postId/comments", (req, res) => {
 
     connection.query(join1, (err, posted_user) => {
       if (err) throw err      
-      // Join 2 requires three table join
+      // Join 2 requires three table joinrsrs
       const strQry = `
     SELECT p.postId, p.img, p.caption, p.peopleTag, p.addlocation, p.likes, p.userId, c.description, c.commentuserId,c.commentId, u.username
       FROM post p
@@ -232,7 +232,7 @@ router.patch("/", bodyParser.json(), (req, res) => {
           );
         } else {
           res.json({
-            msg: "You entered the wrong password"
+            msg: "You entered the wrong password sorry"
           });
           // res.send("You entered the wrong password");
         }
