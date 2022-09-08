@@ -78,7 +78,7 @@ router.get("/:id/post/:postId/comments", (req, res) => {
     ON p.userId = u.ID WHERE p.postId = ${req.params.postId}  `
 
     connection.query(join1, (err, posted_user) => {
-      if (err) throw err      
+      if (err) throw err
       // Join 2 requires three table joinrsrs
       const strQry = `
     SELECT p.postId, p.img, p.caption, p.peopleTag, p.addlocation, p.likes, p.userId, c.description, c.commentuserId,c.commentId, u.username
@@ -90,14 +90,14 @@ router.get("/:id/post/:postId/comments", (req, res) => {
       WHERE p.postId = ${posted_user[0].postId}
        `
 
-    connection.query(strQry, (err, results) => {
-      if (err) throw err
-      res.json({
-        posted_user: posted_user[0],
-        comment: results
-      });
+      connection.query(strQry, (err, results) => {
+        if (err) throw err
+        res.json({
+          posted_user: posted_user[0],
+          comment: results
+        });
+      })
     })
-})
   } catch (error) {
     res.status(400).send(error);
 
@@ -120,9 +120,9 @@ router.post('/', bodyParser.json(), async (req, res) => {
     }
     connection.query(emailQ, email.email, async (err, results) => {
       if (err) throw err;
-      if (!results.length > 1) {
+      if (results.length > 0) {
         res.json({
-          alert: "Email Exists"
+          msg: "Email Exists"
         });
       } else {
         // Encrypting a password
@@ -138,7 +138,7 @@ router.post('/', bodyParser.json(), async (req, res) => {
           if (err) throw err;
           if (results.length > 0) {
             res.json({
-              alert: "username already exists please enter new one , thank you "
+              msg: "username already exists please enter new one , thank you "
             });
           } else {
             // Query
