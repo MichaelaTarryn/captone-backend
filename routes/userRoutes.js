@@ -191,7 +191,7 @@ router.patch("/", bodyParser.json(), (req, res) => {
     connection.query(strQry, async (err, results) => {
       if (err) throw err
 
-      if (!results.length) {
+      if (results.length>0) {
         res.status(401).json({
           msg: "Email not found, Please Register"
         });
