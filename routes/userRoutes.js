@@ -177,7 +177,7 @@ router.post('/', bodyParser.json(), async (req, res) => {
 //   "fullname":"kehlani",
 //   "username":"kehlani",
 //   "password":"kehlani",
-//   "userRole" : null
+//   "userRole" : null,
 // }
 //login
 router.patch("/", bodyParser.json(), (req, res) => {
@@ -190,14 +190,13 @@ router.patch("/", bodyParser.json(), (req, res) => {
 
     connection.query(strQry, async (err, results) => {
       if (err) throw err
-
-      if (results.length ===0 ) {
+      if (results.length === 0) {
         res.status(401).json({
-          msg: "Email not found, Please Register"
+          msg: "Email not found, Please Register "
         });
       } else {
         const ismatch = await compare(password, results[0].password);
-        if (ismatch) {
+        if (ismatch === true) {
           const payload = {
             user: {
               id: results[0].ID,
