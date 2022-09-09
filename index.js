@@ -26,15 +26,11 @@ app.use("/users" ,userRoute);
 
 app.use("/post" ,postroutes);
 app.use("/comments" ,commentroutes);
-// app.use("/followers" ,Followersroutes);
-// app.use(cors({
-//     origin: ['http://127.0.0.1:8080', 'http://localhost:8080'],
-//     credentials: true
-//  }));
+
 app.listen(PORT ,(err) => {
     if(err) throw err
     console.log(`serve running at http://localhost:${PORT}`)
 })
-const {errorHandling} = require('./middleware/ErrorHandling');
+const {errorHandling} = require('./middleware/errorhanding');
 
 app.use(errorHandling);
