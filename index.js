@@ -35,3 +35,6 @@ app.listen(PORT ,(err) => {
     if(err) throw err
     console.log(`serve running at http://localhost:${PORT}`)
 })
+const {errorHandling} = require('./middleware/ErrorHandling');
+
+app.use(errorHandling);

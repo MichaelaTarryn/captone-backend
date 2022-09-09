@@ -1,14 +1,12 @@
 function errorHandling(err, req, res, next) {
     if(err) {
-        // Put your code here.
-    }rs
+      res.status(400).json(
+        {
+            msg: "Error has occurred. Please try again. heroku crashed"
+        }
+    )
+    }
     next();
   }
-
-  // On your index.js
-  const {errorHandling} = require('./middleware/ErrorHandling');
-//   Place the below code at the bottom of index.js so that it catches all errors.
-  // Taking care of all errors
-  app.use(errorHandling);
   
   module.exports = {errorHandling};
